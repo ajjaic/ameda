@@ -1,7 +1,6 @@
 
 #[derive(Debug)]
 struct GridIndex {
-
     grid_length: usize,
     grid_height: usize,
     total_indices: usize,
@@ -17,12 +16,26 @@ struct GridIndex {
 }
 
 impl GridIndex {
-    fn new(grid_extent: (usize, usize)) -> Option<GridIndex> {
+    pub fn new(grid_length: usize, grid_height: usize) -> Option<GridIndex> {
+        /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`
+        /// cells high. The total number of cells in the grid would be a product of both the
+        /// `grid_length` and `grid_height`.
+        ///
+        /// # Examples
+        ///
+        /// ```
+        /// let grid = GridIndex::new(8, 8);
+        /// assert_eq!(grid.unwrap().total_indices, 64);
+        /// let grid = GridIndex::new(5, 3);
+        /// assert_eq!(grid.unwrap().total_indices, 15);
+        ///
+        /// // The minimum grid size is 2x2. The maximum is 511, 511.
+        /// assert_eq!(GridIndex::new(550, 440), None);
+        /// assert_eq!(GridIndex::new(1, 10), None);
+        /// ```
 
-        match grid_extent {
+        match (grid_length, grid_height) {
             (x, y) if x > 1 && y > 1 && x < 512 && x < 512 => {
-                let grid_length = grid_extent.0;
-                let grid_height = grid_extent.1;
                 let total_indices = grid_length * grid_height;
 
                 let mut grid = GridIndex {
@@ -51,7 +64,7 @@ impl GridIndex {
         }
     }
 
-    fn row_indices(&self, row: usize) -> Vec<usize> {
+    fn pub row_indices(&self, row: usize) -> Vec<usize> {
         let start_index = self.grid_length * row;
         let end_index = (self.grid_length * (row + 1)) -1;
 
@@ -62,7 +75,7 @@ impl GridIndex {
         v
     }
 
-    fn column_indices(&self, column: usize) -> Vec<usize> {
+    fn pub column_indices(&self, column: usize) -> Vec<usize> {
         let mut v = Vec::with_capacity(self.grid_height);
         for i in 0..self.grid_height {
             v.push((self.grid_length * i) + column)
@@ -213,18 +226,19 @@ mod tests {
     use super::*;
 
     fn test_data() -> Vec<GridIndex> {
-        let create_grid = |t| match GridIndex::new(t) {
+        let create_grid = |x, y| match GridIndex::new(x, y) {
             Some(a) => a,
             None => panic!(),
         };
-        vec![create_grid((8, 8)),
-             create_grid((8, 4)),
-             create_grid((2, 2)),
-             create_grid((8, 7)),
-             create_grid((12, 10)),
-             create_grid((10, 5)),
-             create_grid((20, 20)),
-             create_grid((123, 115))]
+        vec![create_grid(8, 8),
+             create_grid(8, 4),
+             create_grid(2, 2),
+             create_grid(8, 7),
+             create_grid(5, 3),
+             create_grid(12, 10),
+             create_grid(10, 5),
+             create_grid(20, 20),
+             create_grid(123, 115)]
     }
 
     #[test]
