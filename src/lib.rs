@@ -1,7 +1,7 @@
 
 #[derive(Debug)]
 struct GridIndex {
-    //{{{
+
     grid_length: usize,
     grid_height: usize,
     total_indices: usize,
@@ -14,11 +14,11 @@ struct GridIndex {
     top_row_indices: Vec<usize>,
     bottom_row_indices: Vec<usize>,
     middle_indices: Vec<usize>,
-}//}}}
+}
 
 impl GridIndex {
     fn new(grid_extent: (usize, usize)) -> Option<GridIndex> {
-        //{{{
+
         match grid_extent {
             (x, y) if x > 1 && y > 1 && x < 512 && x < 512 => {
                 let grid_length = grid_extent.0;
@@ -33,42 +33,42 @@ impl GridIndex {
                     top_right_corner: (grid_length - 1),
                     bottom_left_corner: total_indices - grid_length,
                     bottom_right_corner: total_indices - 1,
-                    left_column_indices: GridIndex::column_indices(grid_length, grid_height, 0),
-                    right_column_indices: GridIndex::column_indices(grid_length,
-                                                                    grid_height,
-                                                                    grid_length - 1),
-                    top_row_indices: GridIndex::row_indices(grid_length, 0),
-                    bottom_row_indices: GridIndex::row_indices(grid_length, grid_height - 1),
+                    left_column_indices: vec![],
+                    right_column_indices: vec![],
+                    top_row_indices: vec![],
+                    bottom_row_indices: vec![],
                     middle_indices: vec![],
                 };
 
+                grid.top_row_indices = grid.row_indices(0);
+                grid.bottom_row_indices = grid.row_indices(grid_height - 1);
+                grid.left_column_indices = grid.column_indices(0);
+                grid.right_column_indices = grid.column_indices(grid_length - 1);
                 grid.middle_indices();
                 Some(grid)
             }
             _ => None,
         }
-    }//}}}
+    }
 
-    fn row_indices(grid_length: usize, row: usize) -> Vec<usize> {
-        //{{{
-        let start_index = grid_length * row;
-        let end_index = (grid_length * (row + 1)) - 1;
+    fn row_indices(&self, row: usize) -> Vec<usize> {
+        let start_index = self.grid_length * row;
+        let end_index = (self.grid_length * (row + 1)) -1;
 
-        let mut v = Vec::with_capacity(grid_length);
+        let mut v = Vec::with_capacity(self.grid_length);
         for i in start_index..(end_index + 1) {
             v.push(i);
         }
         v
-    }//}}}
+    }
 
-    fn column_indices(grid_length: usize, grid_height: usize, column: usize) -> Vec<usize> {
-        //{{{
-        let mut v = Vec::with_capacity(grid_height);
-        for i in 0..grid_height {
-            v.push((grid_length * i) + column)
+    fn column_indices(&self, column: usize) -> Vec<usize> {
+        let mut v = Vec::with_capacity(self.grid_height);
+        for i in 0..self.grid_height {
+            v.push((self.grid_length * i) + column)
         }
         v
-    }//}}}
+    }
 
     fn middle_indices(&mut self) {
         for i in 0..self.total_indices {
@@ -79,11 +79,10 @@ impl GridIndex {
             }
 
         }
-
     }
 
     pub fn top_row_indices(&self) -> &Vec<usize> {
-        //{{{
+
         &self.top_row_indices
     }
 
@@ -97,10 +96,10 @@ impl GridIndex {
 
     pub fn bottom_row_indices(&self) -> &Vec<usize> {
         &self.bottom_row_indices
-    }//}}}
+    }
 
     fn neighbor_index(&self, src_index: usize, neighbor: &str) -> Option<usize> {
-        //{{{
+
         let indices_to_check = match neighbor {
             "rt" => (vec![&self.right_column_indices], Some(src_index + 1)),
             "dr" => {
@@ -161,10 +160,10 @@ impl GridIndex {
         } else {
             None
         }
-    }//}}}
+    }
 
     pub fn rt_i(&self, src_index: usize) -> Option<usize> {
-        //{{{
+
         self.neighbor_index(src_index, "rt")
     }
 
@@ -194,7 +193,7 @@ impl GridIndex {
 
     pub fn ur_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "ur")
-    }//}}}
+    }
 
     // fn position(&self, index: usize) -> Pos {
     //     match index {
