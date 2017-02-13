@@ -1,0 +1,6 @@
+[package]
+name = "ameda"
+version = "0.1.0"
+authors = ["aj <zencodes@ajjai.in>"]
+
+[dependencies]
