@@ -1,6 +1,6 @@
 
-#[derive(Debug)]
-struct GridIndex {
+#[derive(Debug, PartialEq)]
+pub struct GridIndex {
     grid_length: usize,
     grid_height: usize,
     total_indices: usize,
@@ -16,24 +16,25 @@ struct GridIndex {
 }
 
 impl GridIndex {
+    /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`
+    /// cells high. The total number of cells in the grid would be a product of both the
+    /// `grid_length` and `grid_height`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 8);
+    /// assert_eq!(grid.unwrap().cell_count(), 64);
+    /// let grid = GridIndex::new(5, 3);
+    /// assert_eq!(grid.unwrap().cell_count(), 15);
+    ///
+    /// // The minimum grid size is 2x2. The maximum is 511, 511.
+    /// assert_eq!(GridIndex::new(550, 440), None);
+    /// assert_eq!(GridIndex::new(1, 10), None);
+    /// ```
     pub fn new(grid_length: usize, grid_height: usize) -> Option<GridIndex> {
-        /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`
-        /// cells high. The total number of cells in the grid would be a product of both the
-        /// `grid_length` and `grid_height`.
-        ///
-        /// # Examples
-        ///
-        /// ```
-        /// let grid = GridIndex::new(8, 8);
-        /// assert_eq!(grid.unwrap().total_indices, 64);
-        /// let grid = GridIndex::new(5, 3);
-        /// assert_eq!(grid.unwrap().total_indices, 15);
-        ///
-        /// // The minimum grid size is 2x2. The maximum is 511, 511.
-        /// assert_eq!(GridIndex::new(550, 440), None);
-        /// assert_eq!(GridIndex::new(1, 10), None);
-        /// ```
-
         match (grid_length, grid_height) {
             (x, y) if x > 1 && y > 1 && x < 512 && x < 512 => {
                 let total_indices = grid_length * grid_height;
@@ -64,9 +65,13 @@ impl GridIndex {
         }
     }
 
-    fn pub row_indices(&self, row: usize) -> Vec<usize> {
+    pub fn cell_count(&self) -> usize {
+        self.total_indices
+    }
+
+    pub fn row_indices(&self, row: usize) -> Vec<usize> {
         let start_index = self.grid_length * row;
-        let end_index = (self.grid_length * (row + 1)) -1;
+        let end_index = (self.grid_length * (row + 1)) - 1;
 
         let mut v = Vec::with_capacity(self.grid_length);
         for i in start_index..(end_index + 1) {
@@ -75,7 +80,7 @@ impl GridIndex {
         v
     }
 
-    fn pub column_indices(&self, column: usize) -> Vec<usize> {
+    pub fn column_indices(&self, column: usize) -> Vec<usize> {
         let mut v = Vec::with_capacity(self.grid_height);
         for i in 0..self.grid_height {
             v.push((self.grid_length * i) + column)
@@ -95,7 +100,6 @@ impl GridIndex {
     }
 
     pub fn top_row_indices(&self) -> &Vec<usize> {
-
         &self.top_row_indices
     }
 
