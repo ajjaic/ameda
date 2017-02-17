@@ -1,7 +1,8 @@
 //! A 2D cell grid represented as a linear Vector. It can be used in applications that require
-//! manipulating specific sets of cells in the grid. For instance, you could get a set of all the
-//! right most cells, left most cells, middle cells of the grid or even the neighbors of a specific
-//! cell. It is very well suited for implementing different kinds of cellular automatons.
+//! manipulating specific sets of cells in the grid. For instance, you could get a set of the
+//! indexes of all the right most cells, left most cells, middle cells of the grid or even the
+//! neighbors of a specific cell. It is well suited for implementing different kinds of cellular
+//! automatons.
 //!
 //! # Examples
 //!
@@ -12,6 +13,7 @@
 //! assert_eq!(grid.right_column_indices(), &vec![7, 15, 23, 31, 39, 47, 55, 63]);
 //! assert_eq!(grid.bottom_row_indices(), &vec![56, 57, 58, 59, 60, 61, 62, 63]);
 //! ```
+
 #[derive(Debug, PartialEq)]
 pub struct GridIndex {
     grid_length: usize,
@@ -38,10 +40,10 @@ impl GridIndex {
     /// ```
     /// use ameda::GridIndex;
     ///
-    /// let grid = GridIndex::new(8, 8);
-    /// assert_eq!(grid.unwrap().cell_count(), 64);
-    /// let grid = GridIndex::new(5, 3);
-    /// assert_eq!(grid.unwrap().cell_count(), 15);
+    /// let grid = GridIndex::new(8, 8).unwrap();
+    /// assert_eq!(grid.cell_count(), 64);
+    /// let grid = GridIndex::new(5, 3).unwrap();
+    /// assert_eq!(grid.cell_count(), 15);
     ///
     /// // The minimum grid size is 2x2. The maximum is 511, 511.
     /// assert_eq!(GridIndex::new(550, 440), None);
@@ -78,37 +80,37 @@ impl GridIndex {
         }
     }
 
+    /// Returns the number of cells in the grid
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 8).unwrap();
+    /// assert_eq!(grid.cell_count(), 64);
+    /// ```
     pub fn cell_count(&self) -> usize {
         self.total_indices
     }
 
-    pub fn row_indices(&self, row: usize) -> Vec<usize> {
-        let start_index = self.grid_length * row;
-        let end_index = (self.grid_length * (row + 1)) - 1;
-
-        let mut v = Vec::with_capacity(self.grid_length);
-        for i in start_index..(end_index + 1) {
-            v.push(i);
+    /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would
+    /// be at the 0th index.
+    pub fn row_cell_indexes(&self, row: usize) -> Option<Vec<usize>> {
+        if row >= self.grid_height {
+            None
+        } else {
+            Some(self.row_indices(row))
         }
-        v
     }
 
-    pub fn column_indices(&self, column: usize) -> Vec<usize> {
-        let mut v = Vec::with_capacity(self.grid_height);
-        for i in 0..self.grid_height {
-            v.push((self.grid_length * i) + column)
-        }
-        v
-    }
-
-    fn middle_indices(&mut self) {
-        for i in 0..self.total_indices {
-            if !self.left_column_indices.contains(&i) && !self.right_column_indices.contains(&i) &&
-               !self.top_row_indices.contains(&i) &&
-               !self.bottom_row_indices.contains(&i) {
-                self.middle_indices.push(i);
-            }
-
+    /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid
+    /// would be at the 0th index.
+    pub fn col_cell_indexes(&self, column: usize) -> Option<Vec<usize>> {
+        if column >= self.grid_length {
+            None
+        } else {
+            Some(self.column_indices(column))
         }
     }
 
@@ -126,6 +128,70 @@ impl GridIndex {
 
     pub fn bottom_row_indices(&self) -> &Vec<usize> {
         &self.bottom_row_indices
+    }
+
+    pub fn rt_i(&self, src_index: usize) -> Option<usize> {
+
+        self.neighbor_index(src_index, "rt")
+    }
+
+    pub fn dr_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "dr")
+    }
+
+    pub fn dn_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "dn")
+    }
+
+    pub fn dl_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "dl")
+    }
+
+    pub fn lt_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "lt")
+    }
+
+    pub fn ul_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "ul")
+    }
+
+    pub fn up_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "up")
+    }
+
+    pub fn ur_i(&self, src_index: usize) -> Option<usize> {
+        self.neighbor_index(src_index, "ur")
+    }
+
+
+    fn row_indices(&self, row: usize) -> Vec<usize> {
+        let start_index = self.grid_length * row;
+        let end_index = (self.grid_length * (row + 1)) - 1;
+
+        let mut v = Vec::with_capacity(self.grid_length);
+        for i in start_index..(end_index + 1) {
+            v.push(i);
+        }
+        v
+    }
+
+    fn column_indices(&self, column: usize) -> Vec<usize> {
+        let mut v = Vec::with_capacity(self.grid_height);
+        for i in 0..self.grid_height {
+            v.push((self.grid_length * i) + column)
+        }
+        v
+    }
+
+    fn middle_indices(&mut self) {
+        for i in 0..self.total_indices {
+            if !self.left_column_indices.contains(&i) && !self.right_column_indices.contains(&i) &&
+               !self.top_row_indices.contains(&i) &&
+               !self.bottom_row_indices.contains(&i) {
+                self.middle_indices.push(i);
+            }
+
+        }
     }
 
     fn neighbor_index(&self, src_index: usize, neighbor: &str) -> Option<usize> {
@@ -192,38 +258,6 @@ impl GridIndex {
         }
     }
 
-    pub fn rt_i(&self, src_index: usize) -> Option<usize> {
-
-        self.neighbor_index(src_index, "rt")
-    }
-
-    pub fn dr_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "dr")
-    }
-
-    pub fn dn_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "dn")
-    }
-
-    pub fn dl_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "dl")
-    }
-
-    pub fn lt_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "lt")
-    }
-
-    pub fn ul_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "ul")
-    }
-
-    pub fn up_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "up")
-    }
-
-    pub fn ur_i(&self, src_index: usize) -> Option<usize> {
-        self.neighbor_index(src_index, "ur")
-    }
 
     // fn position(&self, index: usize) -> Pos {
     //     match index {
