@@ -96,6 +96,17 @@ impl GridIndex {
 
     /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would
     /// be at the 0th index.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(4, 4).unwrap();
+    /// assert!(grid.row_cell_indexes(1).is_some());
+    /// assert!(grid.row_cell_indexes(4).is_none());
+    /// assert_eq!(grid.row_cell_indexes(2), Some(vec![8, 9, 10, 11]));
+    /// ```
     pub fn row_cell_indexes(&self, row: usize) -> Option<Vec<usize>> {
         if row >= self.grid_height {
             None
