@@ -1,4 +1,17 @@
-
+//! A 2D cell grid represented as a linear Vector. It can be used in applications that require
+//! manipulating specific sets of cells in the grid. For instance, you could get a set of all the
+//! right most cells, left most cells, middle cells of the grid or even the neighbors of a specific
+//! cell. It is very well suited for implementing different kinds of cellular automatons.
+//!
+//! # Examples
+//!
+//! ```
+//! use ameda::GridIndex;
+//!
+//! let grid = GridIndex::new(8, 8).unwrap();
+//! assert_eq!(grid.right_column_indices(), &vec![7, 15, 23, 31, 39, 47, 55, 63]);
+//! assert_eq!(grid.bottom_row_indices(), &vec![56, 57, 58, 59, 60, 61, 62, 63]);
+//! ```
 #[derive(Debug, PartialEq)]
 pub struct GridIndex {
     grid_length: usize,
