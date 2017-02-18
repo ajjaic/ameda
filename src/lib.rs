@@ -14,6 +14,8 @@
 //! assert_eq!(grid.bottom_row_indices(), &vec![56, 57, 58, 59, 60, 61, 62, 63]);
 //! ```
 
+
+/// The `GridIndex` struct is used for maintaining the state of the grid.
 #[derive(Debug, PartialEq)]
 pub struct GridIndex {
     grid_length: usize,
@@ -117,6 +119,17 @@ impl GridIndex {
 
     /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid
     /// would be at the 0th index.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert!(grid.col_cell_indexes(1).is_some());
+    /// assert!(grid.col_cell_indexes(7).is_some());
+    /// assert!(grid.col_cell_indexes(8).is_none());
+    /// ```
     pub fn col_cell_indexes(&self, column: usize) -> Option<Vec<usize>> {
         if column >= self.grid_length {
             None
