@@ -1,4 +1,4 @@
-//! A 2D cell grid represented as a linear Vector. It can be used in applications that require
+//! A 2D cell grid represented as a linear Vector. It can be used in applications that require//{{{
 //! manipulating specific sets of cells in the grid. For instance, you could get a set of the
 //! indexes of all the right most cells, left most cells, middle cells of the grid or even the
 //! neighbors of a specific cell. It is well suited for implementing different kinds of cellular
@@ -13,7 +13,7 @@
 //! assert_eq!(grid.right_column_indices(), &vec![7, 15, 23, 31, 39, 47, 55, 63]);
 //! assert_eq!(grid.bottom_row_indices(), &vec![56, 57, 58, 59, 60, 61, 62, 63]);
 //! ```
-
+//}}}
 
 /// The `GridIndex` struct is used for maintaining the state of the grid.
 #[derive(Debug, PartialEq)]
@@ -33,7 +33,7 @@ pub struct GridIndex {
 }
 
 impl GridIndex {
-    /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`
+    /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`//{{{
     /// cells high. The total number of cells in the grid would be a product of both the
     /// `grid_length` and `grid_height`.
     ///
@@ -80,9 +80,9 @@ impl GridIndex {
             }
             _ => None,
         }
-    }
+    }//}}}
 
-    /// Returns the number of cells in the,grid
+    /// Returns the number of cells in the,grid//{{{
     ///
     /// # Example
     ///
@@ -94,9 +94,9 @@ impl GridIndex {
     /// ```
     pub fn cell_count(&self) -> usize {
         self.total_indices
-    }
+    }//}}}
 
-    /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would
+    /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would//{{{
     /// be at the 0th index.
     ///
     /// # Example
@@ -115,9 +115,9 @@ impl GridIndex {
         } else {
             Some(self.row_indices(row))
         }
-    }
+    }//}}}
 
-    /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid
+    /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid//{{{
     /// would be at the 0th index.
     ///
     /// # Example
@@ -137,7 +137,7 @@ impl GridIndex {
         } else {
             Some(self.column_indices(column))
         }
-    }
+    }//}}}
 
     /// Get all the top row indices in the Grid.
     ///
@@ -191,7 +191,7 @@ impl GridIndex {
         &self.bottom_row_indices
     }
 
-    /// Get the index on the right of the given index. Note that even though the grid may have a
+    /// Get the index on the "right" of the given index. Note that even though the grid may have a
     /// numerically higher index; spatially there is no "right"i index past the right most column of
     /// the grid.
     ///
@@ -211,9 +211,9 @@ impl GridIndex {
         self.neighbor_index(src_index, "rt")
     }
 
-    /// Get the index on the down-right of the given index. Note that even though the grid may have
-    /// a numerically higher index; spatially there is no "down-right" index past the right column
-    /// and bottom row of the grid
+    /// Get the index on the "down-right" of the given index. Note that even though the grid may
+    /// have a numerically higher index; spatially there is no "down-right" index past the right
+    /// column and bottom row of the grid
     ///
     /// # Examples
     ///
@@ -230,14 +230,59 @@ impl GridIndex {
         self.neighbor_index(src_index, "dr")
     }
 
+    /// Get the index on the "down" of the given index. Note that even though the grid may have a
+    /// numerically higher index; spatially there is no "down" index past the bottom row of the
+    /// grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.dn_i(6), Some(14));
+    /// assert_eq!(grid.dn_i(22), Some(30));
+    /// assert_eq!(grid.dn_i(24), None);
+    /// assert_eq!(grid.dn_i(31), None);
+    /// ```
     pub fn dn_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "dn")
     }
 
+    /// Get the index on the "down-left" of the given index. Note that even though the grid may have
+    /// a numerically higher index; spatially there is no "down-left" index past the left most
+    /// column and bottom row of the grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.dl_i(6), Some(13));
+    /// assert_eq!(grid.dl_i(22), Some(29));
+    /// assert_eq!(grid.dl_i(16), None);
+    /// assert_eq!(grid.dl_i(26), None);
+    /// ```
     pub fn dl_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "dl")
     }
 
+    /// Get the index on the "left" of the given index. Note that even though the grid may have a
+    /// numerically lower index; spatially there is no "left" index behind the left most column of
+    /// the grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.lt_i(6), Some(5));
+    /// assert_eq!(grid.lt_i(22), Some(21));
+    /// assert_eq!(grid.lt_i(16), None);
+    /// assert_eq!(grid.lt_i(24), None);
+    /// ```
     pub fn lt_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "lt")
     }
