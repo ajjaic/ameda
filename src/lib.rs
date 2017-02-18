@@ -287,14 +287,59 @@ impl GridIndex {
         self.neighbor_index(src_index, "lt")
     }
 
+    /// Get the index on the "upper-left" of the given index. Note that even though the grid may have a
+    /// numerically lower index; spatially there is no "upper-left" index for the left most column
+    /// and the top most row of the grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.ul_i(22), Some(13));
+    /// assert_eq!(grid.ul_i(17), Some(8));
+    /// assert_eq!(grid.ul_i(6), None);
+    /// assert_eq!(grid.ul_i(24), None);
+    /// ```
     pub fn ul_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "ul")
     }
 
+    /// Get the index on the "top" of the given index. Note that even though the grid may have a
+    /// numerically lower index; spatially there is no "top" index above the top most row of the
+    /// grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.up_i(22), Some(14));
+    /// assert_eq!(grid.up_i(17), Some(9));
+    /// assert_eq!(grid.up_i(6), None);
+    /// assert_eq!(grid.up_i(4), None);
+    /// ```
     pub fn up_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "up")
     }
 
+    /// Get the index on the "top-right" of the given index. Note that even though the grid may have
+    /// a numerically lower index; spatially there is no "top-right" index above the top most row or
+    /// past the right most column of the grid.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ameda::GridIndex;
+    ///
+    /// let grid = GridIndex::new(8, 4).unwrap();
+    /// assert_eq!(grid.ur_i(22), Some(15));
+    /// assert_eq!(grid.ur_i(17), Some(10));
+    /// assert_eq!(grid.ur_i(6), None);
+    /// assert_eq!(grid.ur_i(23), None);
+    /// ```
     pub fn ur_i(&self, src_index: usize) -> Option<usize> {
         self.neighbor_index(src_index, "ur")
     }
