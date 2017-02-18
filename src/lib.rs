@@ -1,4 +1,4 @@
-//! A 2D cell grid represented as a linear Vector. It can be used in applications that require//{{{
+//! A 2D cell grid represented as a linear Vector. It can be used in applications that require
 //! manipulating specific sets of cells in the grid. For instance, you could get a set of the
 //! indexes of all the right most cells, left most cells, middle cells of the grid or even the
 //! neighbors of a specific cell. It is well suited for implementing different kinds of cellular
@@ -13,7 +13,7 @@
 //! assert_eq!(grid.right_column_indices(), &vec![7, 15, 23, 31, 39, 47, 55, 63]);
 //! assert_eq!(grid.bottom_row_indices(), &vec![56, 57, 58, 59, 60, 61, 62, 63]);
 //! ```
-//}}}
+
 
 /// The `GridIndex` struct is used for maintaining the state of the grid.
 #[derive(Debug, PartialEq)]
@@ -33,7 +33,7 @@ pub struct GridIndex {
 }
 
 impl GridIndex {
-    /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`//{{{
+    /// Constructs a new 2D grid of cells that are `grid_length` cells wide and `grid_height`
     /// cells high. The total number of cells in the grid would be a product of both the
     /// `grid_length` and `grid_height`.
     ///
@@ -80,9 +80,9 @@ impl GridIndex {
             }
             _ => None,
         }
-    }//}}}
+    }
 
-    /// Returns the number of cells in the,grid//{{{
+    /// Returns the number of cells in the,grid
     ///
     /// # Example
     ///
@@ -94,9 +94,9 @@ impl GridIndex {
     /// ```
     pub fn cell_count(&self) -> usize {
         self.total_indices
-    }//}}}
+    }
 
-    /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would//{{{
+    /// Returns the indices in any the rows in the grid. 0-indexed. The first row in the grid would
     /// be at the 0th index.
     ///
     /// # Example
@@ -115,9 +115,9 @@ impl GridIndex {
         } else {
             Some(self.row_indices(row))
         }
-    }//}}}
+    }
 
-    /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid//{{{
+    /// Returns the indices in any the columns in the grid. 0-indexed. The first column in the grid
     /// would be at the 0th index.
     ///
     /// # Example
@@ -137,7 +137,7 @@ impl GridIndex {
         } else {
             Some(self.column_indices(column))
         }
-    }//}}}
+    }
 
     /// Get all the top row indices in the Grid.
     ///
