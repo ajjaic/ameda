@@ -438,20 +438,7 @@ impl GridIndex {
             None
         }
     }
-
-
-    // fn position(&self, index: usize) -> Pos {
-    //     match index {
-    //         0 => Pos::TopLeftCorner,
-    //         _ => Pos::TopRightCorner, // incorrect
-    //     }
-    // }
 }
-
-// enum Pos {
-//     TopLeftCorner,
-//     TopRightCorner,
-// }
 
 #[cfg(test)]
 mod tests {
@@ -554,59 +541,4 @@ mod tests {
             }
         }
     }
-
-
-    // type Index = usize;
-    // type Size = usize;
-
-    // struct Board {
-    //     size: Size,
-    //     cells: Vec<Cell>,
-    // }
-
-    // struct Right(Index);
-    // struct DownRight(Index);
-    // struct Down(Index);
-
-    // enum Cell {
-    //     TopLeftCorner(CellState, Right, DownRight, Down),
-    // }
-
-    // enum CellState {
-    //     Alive,
-    //     Dead,
-    // }
-
-    // enum Neighbor {
-    //     Right(Index),
-    //     DownRight(Index),
-    //     Down(Index),
-    // }
-
-    // #[test]
-    // fn game_of_life() {
-    //     let mut b = Board {
-    //         size: 8,
-    //         cells: vec![],
-    //     };
-    //     let grid_index_processor = GridIndex::new((8, 8));
-
-    //     for i in 0..64 {
-    //         match grid_index_processor.position(i) {
-
-    //             Pos::TopLeftCorner => {
-    //                 b.cells.push(Cell::TopLeftCorner(CellState::Dead,
-    //                                                  Right(grid_index_processor.rt_index(i)
-    //                                                      .unwrap()),
-    //                                                  DownRight(grid_index_processor.dr_index(i)
-    //                                                      .unwrap()),
-    //                                                  Down(grid_index_processor.dn_index(i)
-    //                                                      .unwrap())));
-    //             }
-    //             _ => (),
-
-    //         }
-
-    //     }
-    // }
 }
