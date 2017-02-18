@@ -4,5 +4,6 @@ version = "0.1.0"
 authors = ["aj <zencodes@ajjai.in>"]
 description = "Manipulate 2D grid indices"
 license = "GPL-3.0"
+repository = "https://github.com/ajjaic/ameda"
 
 [dependencies]
