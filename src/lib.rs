@@ -69,7 +69,7 @@ impl GridIndex {
     /// ```
     pub fn new(grid_length: usize, grid_height: usize) -> Option<GridIndex> {
         match (grid_length, grid_height) {
-            (x, y) if x > 1 && y > 1 && x < 512 && x < 512 => {
+            (x, y) if x > 1 && y > 1 && x < 512 && y < 512 => {
                 let total_indices = grid_length * grid_height;
 
                 let mut grid = GridIndex {
